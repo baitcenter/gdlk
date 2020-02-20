@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint:
-    name: Clippy and Rustfmt
+    name: [ALL] Clippy and Rustfmt
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -30,7 +30,7 @@ jobs:
         with:
           command: clippy
   test-core:
-    name: Test core crate
+    name: [CORE] Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -45,7 +45,7 @@ jobs:
           command: test
           args: -p gdlk
   test-api:
-    name: Test API crate
+    name: [API] Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
