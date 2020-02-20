@@ -1,7 +1,5 @@
-/target
-**/*.rs.bk
 *.gdlk
 .vscode/
-pkg/*
-node_modules/*
-*/target/*
+pkg/
+node_modules/
+target/
