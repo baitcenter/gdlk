@@ -34,8 +34,10 @@
 #![deny(clippy::all, unused_must_use, unused_imports)]
 #![feature(try_trait)]
 
+// Re-export dependencies that consumers may need
+pub use validator;
 #[macro_use]
-extern crate validator_derive;
+pub extern crate validator_derive;
 
 pub mod ast;
 mod consts;
@@ -52,7 +54,6 @@ pub use error::*;
 pub use machine::*;
 pub use models::*;
 pub use util::Valid;
-pub use validator; // Consumers may need this
 
 use ast::{compiled::Program, Span};
 use std::fmt::Debug;

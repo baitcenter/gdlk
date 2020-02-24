@@ -4,8 +4,8 @@ use actix_web::{get, web, HttpRequest, HttpResponse};
 use actix_web_actors::ws;
 use diesel::{prelude::*, PgConnection};
 use gdlk::{
-    compile_and_allocate, CompileErrors, HardwareSpec, Machine, ProgramSpec,
-    RuntimeError, Valid,
+    compile_and_allocate, validator::ValidationErrors, CompileErrors,
+    HardwareSpec, Machine, ProgramSpec, RuntimeError, Valid,
 };
 use serde::{Deserialize, Serialize};
 use std::{
@@ -13,7 +13,6 @@ use std::{
     convert::TryInto,
     time::{Duration, Instant},
 };
-use validator::ValidationErrors;
 
 /// How often heartbeat pings are sent
 const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(5);
