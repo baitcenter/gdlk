@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint:
-    name: [ALL] Clippy and Rustfmt
+    name: "[ALL] Clippy and Rustfmt"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -30,7 +30,7 @@ jobs:
         with:
           command: clippy
   test-core:
-    name: [CORE] Test
+    name: "[CORE] Test"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -45,7 +45,7 @@ jobs:
           command: test
           args: -p gdlk
   test-api:
-    name: [API] Test
+    name: "[API] Test"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -53,3 +53,24 @@ jobs:
         run: docker-compose -f docker-compose.ci.yml build api
       - name: Test API
         run: docker-compose -f docker-compose.ci.yml run api ./docker/run_tests.sh
+  test-api-fast:
+    name: "[API] Test (faster)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Cache cargo build
+        uses: actions/cache@v1
+        with:
+          path: target
+          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y libpq-dev
+          cargo install diesel_cli --no-default-features --features=postgres
+      - name: Start DB
+        run: docker-compose -f docker-compose.ci.yml run -d db
+      - name: Test API
+        env:
+          DATABASE_URL: postgres://root:root@localhost/gdlk
+          RUST_BACKTRACE: 1
+        run: cargo test -p gdlk_api
