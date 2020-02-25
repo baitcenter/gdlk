@@ -21,14 +21,11 @@ services:
   api:
     build:
       context: .
-      dockerfile: ./api/Dockerfile
-      args:
-        install_cargo_watch: 1
+      dockerfile: ./api/dev.Dockerfile
     command: cargo watch -x "run -- server"
     tty: true # Colorize output
     volumes:
-      - ./core:/app/core:ro
-      - ./api:/app/api:ro
+      - ./:/app:ro
       - core_build:/app/core/target
       - api_build:/app/api/target
     depends_on:
