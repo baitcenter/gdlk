@@ -15,11 +15,14 @@ ADD https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/do
 RUN tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
     rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
+WORKDIR /app
+COPY rust-toolchain .
+RUN cargo install diesel_cli --no-default-features --features=postgres
+
 # Need to do this first so we pick up the rust-toolchain file
-COPY .clippy.toml rust-toolchain .rustfmt.toml /app/
+COPY .clippy.toml .rustfmt.toml /app/
 COPY ./api /app/api
 COPY ./core /app/core
 WORKDIR /app/api
-RUN cargo install diesel_cli --no-default-features --features=postgres && \
-    cargo build && \
+RUN cargo build && \
     if [ $install_cargo_watch = 1 ]; then cargo install cargo-watch; fi
